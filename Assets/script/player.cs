@@ -9,7 +9,10 @@ public class player : MonoBehaviour {
 
 	private float horizontal;
 	public float speed;
+    public float jumpForce;
 	private bool faceRight;
+    public Transform groundCheck;
+    private bool grounded;
 
 	// Use this for initialization
 	void Start () {
@@ -21,15 +24,26 @@ public class player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+        //horizontal recebe o valor do eixo X positivo para direita e negetivo para esquerda
+        horizontal = Input.GetAxisRaw("Horizontal");
+
+        // retorna true se houver colisao nos pes
+        grounded = Physics2D.OverlapCircle(groundCheck.position, 0.02f);
+
+        flip(horizontal);
+
+		if (Input.GetButtonDown("Jump") && grounded == true)
+        { 
+			
+            jump(jumpForce);
+        }
+    }
 
 	void FixedUpdate () {
-		//horizontal recebe o valor do eixo X positivo para direita e negetivo para esquerda
-		horizontal = Input.GetAxisRaw ("Horizontal");
-		move (horizontal);
-		flip (horizontal);
-	}
+		
+
+        move(horizontal);
+    }
 
 	private void move(float axisX){
 		rb.velocity = new Vector2(axisX * speed, rb.velocity.y) ;
@@ -47,4 +61,8 @@ public class player : MonoBehaviour {
 			transform.localScale = new Vector3 (-transform.localScale.x, transform.localScale.y, transform.localScale.z );
 		}
 	}
+
+    private void jump(float jumpForce) {
+        rb.AddForce(new Vector2(0, jumpForce));
+    }
 }
