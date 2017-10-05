@@ -13,6 +13,7 @@ public class player : MonoBehaviour {
 	private bool faceRight;
     public Transform groundCheck;
     private bool grounded;
+	public LayerMask isGround;
 
 	// Use this for initialization
 	void Start () {
@@ -27,9 +28,7 @@ public class player : MonoBehaviour {
         //horizontal recebe o valor do eixo X positivo para direita e negetivo para esquerda
         horizontal = Input.GetAxisRaw("Horizontal");
 
-        // retorna true se houver colisao nos pes
-        grounded = Physics2D.OverlapCircle(groundCheck.position, 0.02f);
-
+        
         flip(horizontal);
 
 		if (Input.GetButtonDown("Jump") && grounded == true)
@@ -41,6 +40,8 @@ public class player : MonoBehaviour {
 
 	void FixedUpdate () {
 		
+		// retorna true se houver colisao nos pes
+		grounded = Physics2D.OverlapCircle(groundCheck.position, 0.02f, isGround);
 
         move(horizontal);
     }
@@ -54,7 +55,7 @@ public class player : MonoBehaviour {
 		//se o eixo x for maior que 0 e a face para esquerda ou o eixo x < 0 e a face para direita
 		if(axisX > 0 && !faceRight || axisX < 0 && faceRight){
 
-			//se retorno for verdedadeiro vira a face para a direcao do eixo
+			//se retorno for verdedadeiro vira a face para a direcao do valor positivo do eixo X
 			//a face recebe ela ao contrario, ficando assim na posicao correta
 			faceRight = !faceRight;
 			//ao passar o negativo para o localScale, ele corrige o lado do sprite fazendo a regra do sinal
