@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class cameraController : MonoBehaviour {
+public class CameraController : MonoBehaviour {
 
-	private player scPlayer; //script Player
+	private Player scPlayer; //script Player
 	public Transform L,R; // limite da camera no eixo X
 	private Vector3 destinyX, destinyY;
 	public float speed, cameraHeight;
@@ -12,7 +12,7 @@ public class cameraController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		scPlayer = FindObjectOfType (typeof(player)) as player;
+		scPlayer = FindObjectOfType (typeof(Player)) as Player;
 	}
 
 	// Update is called once per frame

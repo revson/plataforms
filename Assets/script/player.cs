@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class player : MonoBehaviour {
+public class Player : MonoBehaviour {
 
 	//variaveis
 	private Rigidbody2D rb;
+	private Animator playerAnimator;
 
 	private float horizontal;
 	public float speed;
@@ -13,11 +14,13 @@ public class player : MonoBehaviour {
 	private bool faceRight;
     public Transform groundCheck;
     private bool grounded;
+	private bool run;
 	public LayerMask isGround;
 
 	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody2D> ();
+		playerAnimator = GetComponent<Animator> ();
 
 		//inicializa com o valor do scale se for > 0 (olhando para direita)
 		faceRight = transform.localScale.x > 0;
@@ -27,8 +30,12 @@ public class player : MonoBehaviour {
 	void Update () {
         //horizontal recebe o valor do eixo X positivo para direita e negetivo para esquerda
         horizontal = Input.GetAxisRaw("Horizontal");
+		if (horizontal != 0) {
+			run = true;
+		} else {
+			run = false;
+		}
 
-        
         flip(horizontal);
 
 		if (Input.GetButtonDown("Jump") && grounded == true)
@@ -36,12 +43,18 @@ public class player : MonoBehaviour {
 			
             jump(jumpForce);
         }
+
+		//atualiza o animator
+		playerAnimator.SetBool("runAnimator", run);
+		playerAnimator.SetFloat ("VelocidadeY", rb.velocity.y);
+		playerAnimator.SetBool ("Grounded", grounded);
+
     }
 
 	void FixedUpdate () {
 		
 		// retorna true se houver colisao nos pes
-		grounded = Physics2D.OverlapCircle(groundCheck.position, 0.02f, isGround);
+		grounded = Physics2D.OverlapCircle(groundCheck.position, 0.5f, isGround);
 
         move(horizontal);
     }
@@ -66,4 +79,21 @@ public class player : MonoBehaviour {
     private void jump(float jumpForce) {
         rb.AddForce(new Vector2(0, jumpForce));
     }
+
+	private void OnTriggerEnter2D(Collider2D col){
+		//switch()
+		//print(col.tag);
+	}
+
+	private void OnCollisionEnter2D(Collision2D col){
+		//switch()
+		//print(col.tag);
+	}
+
+
+	// funcao nativa do unity usada para mostrar o groundCheck
+	private void OnDrawGizmos(){
+		Gizmos.color = Color.red;
+		Gizmos.DrawWireSphere (groundCheck.position, 0.5f);
+	}
 }
