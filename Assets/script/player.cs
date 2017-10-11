@@ -54,7 +54,7 @@ public class Player : MonoBehaviour {
 	void FixedUpdate () {
 		
 		// retorna true se houver colisao nos pes
-		grounded = Physics2D.OverlapCircle(groundCheck.position, 0.5f, isGround);
+		grounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, isGround);
 
         move(horizontal);
     }
@@ -94,6 +94,6 @@ public class Player : MonoBehaviour {
 	// funcao nativa do unity usada para mostrar o groundCheck
 	private void OnDrawGizmos(){
 		Gizmos.color = Color.red;
-		Gizmos.DrawWireSphere (groundCheck.position, 0.5f);
+		Gizmos.DrawWireSphere (groundCheck.position, 0.1f);
 	}
 }
